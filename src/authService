@@ -1,0 +1,26 @@
+import { supabase } from './supabase'
+
+export const authService = {
+  // Verificar si el usuario está autenticado
+  isAuthenticated() {
+    const session = supabase.auth.getSession()
+    return session?.data?.session?.user != null
+  },
+
+  // Obtener el usuario actual
+  async getCurrentUser() {
+    const { data: { user } } = await supabase.auth.getUser()
+    return user
+  },
+
+  // Cerrar sesión
+  async signOut() {
+    const { error } = await supabase.auth.signOut()
+    return { error }
+  },
+
+  // Escuchar cambios en la autenticación
+  onAuthStateChange(callback) {
+    return supabase.auth.onAuthStateChange(callback)
+  }
+}
